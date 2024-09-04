@@ -4,6 +4,7 @@ import { connectDB } from "./config/mongoose.config.js";
 import authRoutes from "./routes/auth.route.js"
 import cors from "cors";
 import notificationsRoutes from './routes/notification.routes.js'
+import locationsRoutes from "./routes/locations.route.js"
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 const mongoURI = process.env.MONGOURI;
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notification', notificationsRoutes);
+app.use('/api/location', locationsRoutes);
 
 app.listen(PORT, () => {
   console.log("App is listening on port:", PORT);
