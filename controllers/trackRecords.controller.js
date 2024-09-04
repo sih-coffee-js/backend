@@ -102,3 +102,21 @@ export const getRecordsbyDate = async (req, res, next) => {
     return next(errorHandler(500, 'Internal Error'));
   }
 }
+
+export const getRecords = async (req, res, next) => {
+  const { userId } = req.body;
+  console.log(req.body);
+  if (!userId) {
+    return next(errorHandler(400, 'UserId and date is required'));
+  }
+  try {
+    const records = await trackrecord.find({
+      user: userId,
+    }).populate('location');
+    return res.status(200).json(records);
+
+  } catch (e) {
+    console.log(e);
+    return next(errorHandler(500, 'Internal Error'));
+  }
+}
