@@ -11,6 +11,12 @@ const trackRecordSchema = new mongoose.Schema({
         ref: 'locations',
         required: true
     },
+    type:{
+        type: String,
+        required: true,
+        default: 'CheckIn',
+        enum:['CheckIn','CheckOut']
+    },
     time: {
         type: Date,
         default: Date.now

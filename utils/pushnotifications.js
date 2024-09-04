@@ -1,5 +1,8 @@
 import { Expo } from 'expo-server-sdk';
 import expoToken from '../models/expotoken.model.js';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 let expo = new Expo({
     accessToken: process.env.EXPO_ACCESS_TOKEN,
