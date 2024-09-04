@@ -23,6 +23,6 @@ const trackRecordSchema = new mongoose.Schema({
     }
 })
 
-const trackRecord = mongoose.model('trackRecord', trackRecordSchema);
+const trackRecord = mongoose.models.trackRecord || mongoose.model('trackRecord', trackRecordSchema);
 
 export default trackRecord
