@@ -120,3 +120,37 @@ export const getRecords = async (req, res, next) => {
     return next(errorHandler(500, 'Internal Error'));
   }
 }
+
+export const getAllRecordsbyDate = async (req, res, next) => {
+  const { date } = req.body;
+  console.log(req.body);
+  if (!date) {
+    return next(errorHandler(400, 'date is required'));
+  }
+  try {
+    var startDate = new Date(date);
+
+    startDate.setSeconds(0);
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+
+    var dateMidnight = new Date(startDate);
+
+    dateMidnight.setHours(23);
+    dateMidnight.setMinutes(59);
+    dateMidnight.setSeconds(59);
+
+    const records = await trackrecord.find({
+      time: {
+        $gt: startDate,
+        $lt: dateMidnight
+      }
+    }).populate('location').populate('user');
+
+    return res.status(200).json(records);
+
+  } catch (e) {
+    console.log(e);
+    return next(errorHandler(500, 'Internal Error'));
+  }
+}
