@@ -55,7 +55,7 @@ export const getLocations = async (req, res, next) => {
 
       locs.push({
         location: locationsList[i],
-        users: uniqueUsers.length
+        users: uniqueUsers
       });
     }
     res.status(200).json(locs);
