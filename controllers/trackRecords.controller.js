@@ -33,11 +33,12 @@ export const trackRecords = async (req, res, next) => {
   ) {
     return next(errorHandler(400, 'All fields are required'));
   }
-
+  console.log("----")
   try {
     const allLocations = await locations.find();
     for (let loc of allLocations) {
       const distance = getDistanceFromLatLonInKm(latitude, longitude, loc.latitude, loc.longitude);
+      console.log("Distance:"+distance);
       const prevRecord = await trackrecord.findOne(
         { user: userId, location: loc._id },
         null,
@@ -61,6 +62,7 @@ export const trackRecords = async (req, res, next) => {
         }
       }
     }
+    console.log("----")
     return res.status(200).json({ success: true, result: 'none' });
   } catch (error) {
     console.log(error);
