@@ -70,6 +70,16 @@ export const getLocations = async (req, res, next) => {
   }
 };
 
+export const getAllLocations = async (req, res, next) => {
+  try {
+    const locationsList = await locations.find();
+    res.status(200).json(locationsList);
+  } catch (error) {
+    console.log(error);
+    next(errorHandler(500, 'Internal Server Error'));
+  }
+};
+
 export const PresentAtLocations = async (req, res, next) => {
   const { locationId } = req.body;
   console.log(locationId);
