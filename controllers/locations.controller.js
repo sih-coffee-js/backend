@@ -69,3 +69,52 @@ export const getLocations = async (req, res, next) => {
     next(errorHandler(500, 'Internal Server Error'));
   }
 };
+
+export const PresentAtLocations = async (req, res, next) => {
+  const { locationId } = req.body;
+  console.log(locationId);
+  try {
+    var startDate = new Date();
+    startDate.setSeconds(0);
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+
+    var dateMidnight = new Date(startDate);
+    dateMidnight.setHours(23);
+    dateMidnight.setMinutes(59);
+    dateMidnight.setSeconds(59);
+
+    const uniqueUserIds = await trackRecord.distinct('user', {
+      location: locationId,
+      time: {
+        $gt: startDate,
+        $lt: dateMidnight
+      }
+    });
+
+    console.log(uniqueUserIds);
+
+    let checkedInUsers = [];
+
+    for (let userId of uniqueUserIds) {
+      const latestTrackRecord = await trackRecord.find({
+        user: userId,
+        location: locationId,
+        time: {
+          $gt: startDate,
+          $lt: dateMidnight
+        }
+      }).sort({ time: -1 }).limit(1);
+      console.log(latestTrackRecord);
+      if (latestTrackRecord.length == 1 && latestTrackRecord[0].type === "CheckIn") {
+        const user = await User.findById(userId);
+        checkedInUsers.push(user);
+      }
+    }
+    res.status(200).json(checkedInUsers);
+  } catch (error) {
+    console.log(error);
+    next(errorHandler(500, 'Internal Server Error'));
+  }
+};
+
